@@ -1,0 +1,976 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dastarkhwan — Design Thinking Presentation</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Inter:wght@300;400;500;600;700;800&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{font-size:18px;scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;background:#f0f2f8;color:#1a1a2e;overflow:hidden;height:100vh;width:100vw;-webkit-font-smoothing:antialiased}
+
+:root{
+  --bg:#f0f2f8;
+  --bg-card:#ffffff;
+  --bg-card-hover:#f8f9fd;
+  --shadow:0 4px 24px rgba(26,26,46,0.08);
+  --shadow-lg:0 12px 40px rgba(26,26,46,0.12);
+  --border:rgba(26,26,46,0.08);
+  --gold:#b8860b;
+  --gold-light:#d4a843;
+  --gold-bg:rgba(184,134,11,0.08);
+  --gold-border:rgba(184,134,11,0.2);
+  --rose:#c0392b;
+  --rose-bg:rgba(192,57,43,0.07);
+  --rose-border:rgba(192,57,43,0.18);
+  --teal:#00856a;
+  --teal-bg:rgba(0,133,106,0.07);
+  --teal-border:rgba(0,133,106,0.18);
+  --blue:#2d6ecf;
+  --blue-bg:rgba(45,110,207,0.07);
+  --blue-border:rgba(45,110,207,0.18);
+  --purple:#5b3dc7;
+  --purple-bg:rgba(91,61,199,0.07);
+  --purple-border:rgba(91,61,199,0.18);
+  --orange:#d35400;
+  --text:#1a1a2e;
+  --text-muted:#4a5068;
+  --text-subtle:#8891a5;
+}
+
+/* BG DECORATION */
+.bg-decoration{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none;overflow:hidden}
+.bg-blob{position:absolute;border-radius:50%;filter:blur(120px);opacity:0.25;animation:blobFloat 25s ease-in-out infinite}
+.bg-blob:nth-child(1){width:700px;height:700px;background:#d4a843;top:-300px;right:-200px;animation-delay:0s}
+.bg-blob:nth-child(2){width:600px;height:600px;background:#6c9bd1;bottom:-250px;left:-200px;animation-delay:-8s;animation-duration:30s}
+.bg-blob:nth-child(3){width:500px;height:500px;background:#a3d9c8;top:40%;left:60%;animation-delay:-15s;animation-duration:28s}
+@keyframes blobFloat{0%,100%{transform:translate(0,0) scale(1)}25%{transform:translate(50px,-40px) scale(1.08)}50%{transform:translate(-30px,50px) scale(0.95)}75%{transform:translate(40px,30px) scale(1.04)}}
+
+/* PROGRESS BAR */
+.progress-bar{position:fixed;top:0;left:0;height:4px;background:linear-gradient(90deg,var(--gold),var(--rose),var(--purple));z-index:1000;transition:width 0.5s cubic-bezier(0.4,0,0.2,1);box-shadow:0 1px 8px rgba(184,134,11,0.3)}
+
+/* NAV */
+.nav-arrows{position:fixed;bottom:28px;right:28px;display:flex;gap:10px;z-index:1000}
+.nav-btn{width:52px;height:52px;border-radius:50%;border:2px solid var(--border);background:var(--bg-card);color:var(--text);font-size:1.3rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.3s ease;box-shadow:var(--shadow)}
+.nav-btn:hover{background:var(--gold);color:#fff;border-color:var(--gold);transform:scale(1.1)}
+.nav-btn:disabled{opacity:0.3;cursor:not-allowed;transform:none}
+.nav-dots{position:fixed;bottom:32px;left:50%;transform:translateX(-50%);display:flex;gap:8px;z-index:1000}
+.nav-dot{width:10px;height:10px;border-radius:50%;background:var(--text-subtle);opacity:0.4;cursor:pointer;transition:all 0.3s ease;border:none}
+.nav-dot.active{background:var(--gold);opacity:1;transform:scale(1.4);box-shadow:0 0 12px rgba(184,134,11,0.4)}
+.nav-dot:hover{opacity:0.8;transform:scale(1.2)}
+.slide-counter{position:fixed;bottom:35px;left:28px;font-size:0.85rem;color:var(--text-subtle);z-index:1000;font-weight:500;letter-spacing:2px}
+
+/* SLIDES */
+.slides-container{position:relative;width:100vw;height:100vh;z-index:10}
+.slide{position:absolute;top:0;left:0;width:100vw;height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:50px 60px 80px;opacity:0;visibility:hidden;pointer-events:none;overflow-y:auto;overflow-x:hidden}
+.slide.active{opacity:1;visibility:visible;pointer-events:auto;transform:translateX(0)}
+.slide.transitioning{visibility:visible;transition:opacity 0.5s cubic-bezier(0.4,0,0.2,1),transform 0.5s cubic-bezier(0.4,0,0.2,1)}
+
+/* TYPOGRAPHY — BIGGER FOR CLASSROOM */
+.heading-xl{font-family:'Playfair Display',serif;font-size:4.5rem;font-weight:900;line-height:1.1;margin-bottom:0.8rem}
+.heading-lg{font-family:'Playfair Display',serif;font-size:2.8rem;font-weight:700;line-height:1.2;margin-bottom:0.6rem}
+.heading-md{font-family:'Playfair Display',serif;font-size:2.2rem;font-weight:700;line-height:1.25;margin-bottom:0.5rem}
+.text-gradient{background:linear-gradient(135deg,var(--gold),var(--rose));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.text-gold{color:var(--gold)}.text-rose{color:var(--rose)}.text-teal{color:var(--teal)}.text-blue{color:var(--blue)}.text-purple{color:var(--purple)}.text-muted{color:var(--text-muted)}.text-subtle{color:var(--text-subtle)}
+.label{font-size:0.85rem;font-weight:700;text-transform:uppercase;letter-spacing:4px;color:var(--gold);margin-bottom:0.8rem}
+.subtitle{font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-style:italic;color:var(--text-muted);max-width:700px;text-align:center;line-height:1.6}
+
+/* ANIMATE */
+.slide.active .animate-in{animation:fadeSlideUp 0.55s ease forwards}
+.animate-in{opacity:0;transform:translateY(25px)}
+.animate-in:nth-child(1){animation-delay:.08s}.animate-in:nth-child(2){animation-delay:.16s}.animate-in:nth-child(3){animation-delay:.24s}.animate-in:nth-child(4){animation-delay:.32s}.animate-in:nth-child(5){animation-delay:.4s}.animate-in:nth-child(6){animation-delay:.48s}.animate-in:nth-child(7){animation-delay:.56s}.animate-in:nth-child(8){animation-delay:.64s}
+@keyframes fadeSlideUp{to{opacity:1;transform:translateY(0)}}
+
+/* TITLE SLIDE */
+.title-slide{text-align:center}
+.title-slide .team-badge{display:inline-block;padding:10px 28px;border:2px solid var(--gold);border-radius:50px;font-size:0.85rem;letter-spacing:5px;text-transform:uppercase;color:var(--gold);font-weight:700;margin-bottom:1.5rem}
+.title-slide .main-title{font-family:'Playfair Display',serif;font-size:6rem;font-weight:900;line-height:1}
+.title-slide .urdu-meaning{font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-style:italic;color:var(--text-muted);margin-bottom:1.5rem}
+.title-divider{width:80px;height:3px;background:linear-gradient(90deg,transparent,var(--gold),transparent);margin:1.2rem auto}
+
+/* STATS */
+.stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;margin:1.5rem 0;width:100%;max-width:950px}
+.stat-card{text-align:center;padding:1.8rem 1.2rem;background:var(--bg-card);border-radius:16px;box-shadow:var(--shadow);border:1px solid var(--border)}
+.stat-number{font-family:'Playfair Display',serif;font-size:2.8rem;font-weight:900;line-height:1;margin-bottom:0.4rem}
+.stat-label{font-size:1rem;color:var(--text-muted);line-height:1.4}
+
+/* TEAM */
+.team-grid{display:flex;gap:1.8rem;justify-content:center;flex-wrap:wrap;margin-top:1.5rem}
+.team-member{text-align:center;padding:1.8rem 1.5rem;background:var(--bg-card);border-radius:16px;box-shadow:var(--shadow);width:170px;transition:all 0.3s ease;border:1px solid var(--border)}
+.team-member:hover{transform:translateY(-8px);border-color:var(--gold);box-shadow:var(--shadow-lg)}
+.team-avatar{width:68px;height:68px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--rose));display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:700;color:#fff;margin:0 auto 0.8rem}
+.team-member .name{font-weight:700;font-size:1.1rem}
+
+/* PERSONA */
+.persona-layout{display:grid;grid-template-columns:300px 1fr;gap:2rem;width:100%;max-width:1200px;align-items:start}
+.persona-card{background:var(--bg-card);border:1px solid var(--border);border-radius:20px;box-shadow:var(--shadow);padding:1.8rem;text-align:center}
+.persona-avatar{width:80px;height:80px;border-radius:50%;margin:0 auto 1rem;display:flex;align-items:center;justify-content:center;font-size:2.5rem}
+.persona-name{font-family:'Playfair Display',serif;font-size:1.6rem;font-weight:700;margin-bottom:0.2rem}
+.persona-role{font-size:0.95rem;color:var(--gold);font-weight:600;margin-bottom:1.2rem}
+.persona-attrs{text-align:left;font-size:0.95rem}
+.persona-attr{display:flex;padding:7px 0;border-bottom:1px solid var(--border)}
+.persona-attr:last-child{border-bottom:none}
+.persona-attr-label{color:var(--text-subtle);min-width:85px;font-weight:600;font-size:0.85rem}
+.persona-attr-value{color:var(--text);font-size:0.95rem}
+.persona-details{display:flex;flex-direction:column;gap:1.2rem}
+.quote-block{position:relative;padding:1.2rem 1.5rem;font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-style:italic;color:var(--text-muted);line-height:1.6;border-left:4px solid var(--gold);background:var(--gold-bg);border-radius:0 12px 12px 0}
+.detail-section h3{font-size:0.9rem;font-weight:700;text-transform:uppercase;letter-spacing:2px;margin-bottom:0.6rem}
+.detail-section ul{list-style:none;font-size:1.05rem;line-height:1.55;color:var(--text-muted)}
+.detail-section ul li{padding:3px 0 3px 1.2rem;position:relative}
+.detail-section ul li::before{content:'';position:absolute;left:0;top:11px;width:7px;height:7px;border-radius:50%}
+.goals-list li::before{background:var(--teal)}
+.frustrations-list li::before{background:var(--rose)}
+
+/* EMPATHY MAP */
+.empathy-map{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:14px;width:100%;max-width:1050px;margin-top:0.8rem}
+.empathy-quadrant{padding:1.4rem 1.5rem;border-radius:16px;border:2px solid;box-shadow:var(--shadow);transition:transform 0.3s ease}
+.empathy-quadrant:hover{transform:scale(1.015)}
+.empathy-quadrant h4{font-size:0.9rem;font-weight:800;text-transform:uppercase;letter-spacing:3px;margin-bottom:0.6rem}
+.empathy-quadrant p{font-size:1.05rem;line-height:1.65;color:var(--text-muted)}
+.eq-says{background:var(--blue-bg);border-color:var(--blue-border)}.eq-says h4{color:var(--blue)}
+.eq-thinks{background:var(--purple-bg);border-color:var(--purple-border)}.eq-thinks h4{color:var(--purple)}
+.eq-feels{background:var(--rose-bg);border-color:var(--rose-border)}.eq-feels h4{color:var(--rose)}
+.eq-does{background:var(--teal-bg);border-color:var(--teal-border)}.eq-does h4{color:var(--teal)}
+
+/* JOURNEY MAP */
+.journey-container{width:100%;max-width:1200px;margin-top:0.8rem}
+.journey-timeline{display:flex;gap:0;position:relative}
+.journey-timeline::before{content:'';position:absolute;top:24px;left:30px;right:30px;height:3px;background:linear-gradient(90deg,var(--gold),var(--rose),var(--purple));opacity:0.3;border-radius:2px}
+.journey-stage{flex:1;min-width:0;padding:0 6px;text-align:center;position:relative}
+.journey-dot{width:14px;height:14px;border-radius:50%;background:var(--gold);margin:18px auto 12px;position:relative;z-index:2;box-shadow:0 0 10px rgba(184,134,11,0.3)}
+.journey-stage-card{background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:0.9rem;text-align:left;box-shadow:var(--shadow);transition:transform 0.3s ease}
+.journey-stage-card:hover{transform:translateY(-3px)}
+.journey-stage-card h5{font-size:0.82rem;font-weight:800;color:var(--gold);margin-bottom:6px;text-transform:uppercase;letter-spacing:1px}
+.journey-stage-card .emotion{font-family:'Cormorant Garamond',serif;font-style:italic;color:var(--text-muted);margin-bottom:6px;font-size:0.92rem;line-height:1.35}
+.journey-stage-card .pain{color:var(--rose);font-size:0.88rem;margin-bottom:5px;line-height:1.35;font-weight:500}
+.journey-stage-card .pain::before{content:'⚠ '}
+.journey-stage-card .opportunity{color:var(--teal);font-size:0.88rem;font-weight:600;line-height:1.35}
+.journey-stage-card .opportunity::before{content:'💡 '}
+
+/* DESIGN BRIEF */
+.brief-layout{max-width:950px;text-align:center}
+.challenge-text{font-family:'Cormorant Garamond',serif;font-size:1.4rem;line-height:1.7;color:var(--text-muted);margin-top:1.2rem;padding:1.5rem 2rem;border:2px solid var(--gold-border);border-radius:16px;background:var(--gold-bg)}
+.target-users{display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem;margin-top:1.5rem;width:100%}
+.target-user-card{padding:1.4rem;background:var(--bg-card);border:1px solid var(--border);border-radius:14px;text-align:center;box-shadow:var(--shadow)}
+.target-user-card .tu-icon{font-size:2.5rem;margin-bottom:0.6rem}
+.target-user-card h4{font-size:0.85rem;font-weight:700;text-transform:uppercase;letter-spacing:2px;margin-bottom:0.4rem}
+.target-user-card p{font-size:1rem;color:var(--text-muted);line-height:1.45}
+
+/* ===== HTML MAPS ===== */
+.map-container{width:100%;max-width:1150px;margin-top:0.5rem}
+
+/* STAKEHOLDER MAP */
+.stakeholder-map{display:grid;grid-template-columns:1fr;gap:1.2rem}
+.stake-ring{display:flex;justify-content:center;flex-wrap:wrap;gap:0.8rem}
+.stake-center{text-align:center;padding:1.2rem 2rem;background:linear-gradient(135deg,var(--rose),var(--gold));color:#fff;border-radius:16px;font-size:1.1rem;font-weight:700;box-shadow:var(--shadow-lg);max-width:400px;margin:0 auto}
+.stake-center .sc-icon{font-size:2rem;margin-bottom:0.3rem}
+.stake-center p{font-size:0.95rem;font-weight:400;opacity:0.9;margin-top:0.3rem}
+.stake-label{text-align:center;font-size:0.8rem;font-weight:700;text-transform:uppercase;letter-spacing:3px;margin-top:0.5rem;padding:4px 16px;border-radius:20px;display:inline-block}
+.stake-card{padding:0.9rem 1.1rem;background:var(--bg-card);border-radius:12px;box-shadow:var(--shadow);border-left:4px solid;min-width:180px;max-width:250px;flex:1}
+.stake-card h5{font-size:0.85rem;font-weight:700;margin-bottom:0.3rem;display:flex;align-items:center;gap:6px}
+.stake-card ul{list-style:none;font-size:0.82rem;color:var(--text-muted);line-height:1.5}
+.stake-card ul li{padding:1px 0}
+.stake-card.primary{border-left-color:var(--rose)}
+.stake-card.secondary{border-left-color:var(--blue)}
+.stake-card.tertiary{border-left-color:var(--teal)}
+.stake-legend{display:flex;gap:1.5rem;justify-content:center;margin-top:0.5rem}
+.stake-legend span{font-size:0.8rem;font-weight:600;display:flex;align-items:center;gap:6px}
+.stake-legend span::before{content:'';width:12px;height:12px;border-radius:50%;display:inline-block}
+.legend-primary::before{background:var(--rose)!important}
+.legend-secondary::before{background:var(--blue)!important}
+.legend-tertiary::before{background:var(--teal)!important}
+
+/* CONTEXT MAP */
+.context-map{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem}
+.context-center{grid-column:1/4;text-align:center;padding:1.2rem;background:linear-gradient(135deg,#2d3436,#1a1a2e);color:#fff;border-radius:16px;box-shadow:var(--shadow-lg)}
+.context-center h4{font-size:1.1rem;font-weight:700;margin-bottom:0.3rem}
+.context-center p{font-size:0.95rem;opacity:0.85}
+.context-card{padding:1rem 1.1rem;background:var(--bg-card);border-radius:12px;box-shadow:var(--shadow);border-top:3px solid}
+.context-card h5{font-size:0.85rem;font-weight:700;margin-bottom:0.5rem;display:flex;align-items:center;gap:6px}
+.context-card ul{list-style:none;font-size:0.85rem;color:var(--text-muted);line-height:1.5}
+.context-card ul li{padding:2px 0;padding-left:0.8rem;position:relative}
+.context-card ul li::before{content:'›';position:absolute;left:0;color:var(--text-subtle);font-weight:bold}
+.context-flow{grid-column:1/4;display:flex;gap:0.8rem;flex-wrap:wrap;justify-content:center}
+.flow-item{padding:0.6rem 1rem;background:var(--bg-card);border-radius:8px;font-size:0.82rem;font-weight:600;box-shadow:var(--shadow);display:flex;align-items:center;gap:6px}
+.flow-arrow{color:var(--gold);font-weight:bold}
+
+/* OPPORTUNITY MAP */
+.opportunity-map{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem}
+.opp-core{grid-column:1/4;text-align:center;padding:1.2rem 2rem;background:linear-gradient(135deg,var(--purple),var(--blue));color:#fff;border-radius:16px;box-shadow:var(--shadow-lg)}
+.opp-core h4{font-size:1.15rem;font-weight:700;margin-bottom:0.3rem}
+.opp-core p{font-size:0.95rem;opacity:0.9}
+.opp-card{padding:1rem 1.1rem;background:var(--bg-card);border-radius:12px;box-shadow:var(--shadow);border-left:4px solid var(--gold);transition:transform 0.3s ease}
+.opp-card:hover{transform:translateY(-3px)}
+.opp-card .opp-num{font-family:'Playfair Display',serif;font-size:1.8rem;font-weight:900;color:var(--gold);opacity:0.3;float:right;line-height:1}
+.opp-card h5{font-size:0.9rem;font-weight:700;margin-bottom:0.3rem;color:var(--text)}
+.opp-card p{font-size:0.85rem;color:var(--text-muted);line-height:1.45}
+.opp-impact{grid-column:1/4;display:flex;gap:0.8rem;flex-wrap:wrap;justify-content:center;padding:0.8rem;background:var(--teal-bg);border:2px solid var(--teal-border);border-radius:14px}
+.opp-impact-item{text-align:center;padding:0.5rem 1rem;min-width:140px}
+.opp-impact-item .ii-icon{font-size:1.5rem;margin-bottom:0.2rem}
+.opp-impact-item p{font-size:0.78rem;font-weight:600;color:var(--teal)}
+
+/* CONSTRAINTS */
+.constraints-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem;max-width:1100px;margin-top:1rem}
+.constraint-card{padding:1.4rem;background:var(--bg-card);border:1px solid var(--border);border-radius:14px;box-shadow:var(--shadow);transition:all 0.3s ease}
+.constraint-card:hover{transform:translateY(-4px);border-color:var(--gold)}
+.constraint-card .cc-icon{font-size:2rem;margin-bottom:0.5rem}
+.constraint-card h4{font-size:1rem;font-weight:700;margin-bottom:0.4rem;color:var(--gold)}
+.constraint-card p{font-size:1rem;color:var(--text-muted);line-height:1.5}
+
+/* PRINCIPLES */
+.principles-list{max-width:850px;width:100%;margin-top:1rem}
+.principle-item{display:flex;align-items:flex-start;gap:1.2rem;padding:1.2rem 1.5rem;margin-bottom:0.8rem;background:var(--bg-card);border:1px solid var(--border);border-radius:14px;box-shadow:var(--shadow);transition:all 0.3s ease}
+.principle-item:hover{transform:translateX(6px);border-color:var(--gold)}
+.principle-num{font-family:'Playfair Display',serif;font-size:2rem;font-weight:900;color:var(--gold);opacity:0.4;min-width:40px}
+.principle-content h4{font-size:1.15rem;font-weight:700;margin-bottom:0.2rem}
+.principle-content p{font-size:1.05rem;color:var(--text-muted);line-height:1.5}
+
+/* METRICS */
+.metrics-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1.2rem;max-width:1100px;margin-top:1rem}
+.metric-card{text-align:center;padding:1.5rem 1rem;background:var(--bg-card);border:1px solid var(--border);border-radius:16px;box-shadow:var(--shadow);transition:all 0.3s ease}
+.metric-card:hover{transform:translateY(-5px);border-color:var(--gold);box-shadow:var(--shadow-lg)}
+.metric-value{font-family:'Playfair Display',serif;font-size:2.5rem;font-weight:900;line-height:1;margin-bottom:0.4rem}
+.metric-label{font-size:0.95rem;color:var(--text-muted);line-height:1.35}
+
+/* DELIVERABLES */
+.deliverables-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem;max-width:1000px;margin-top:1rem}
+.deliverable-card{padding:1.5rem;background:var(--bg-card);border:1px solid var(--border);border-radius:14px;text-align:center;box-shadow:var(--shadow);transition:all 0.3s ease}
+.deliverable-card:hover{transform:translateY(-5px);border-color:var(--gold)}
+.deliverable-card .dc-icon{font-size:2.5rem;margin-bottom:0.8rem}
+.deliverable-card h4{font-size:1.05rem;font-weight:700;margin-bottom:0.3rem}
+.deliverable-card p{font-size:0.95rem;color:var(--text-muted);line-height:1.4}
+
+/* THANK YOU */
+.thankyou-slide{text-align:center}
+.thankyou-slide .heart{font-size:4rem;animation:heartbeat 1.5s ease infinite;display:inline-block}
+@keyframes heartbeat{0%,100%{transform:scale(1)}15%{transform:scale(1.15)}30%{transform:scale(1)}45%{transform:scale(1.1)}}
+
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--gold);border-radius:4px}
+
+@media(max-width:1024px){
+  .slide{padding:35px 25px 75px}
+  .title-slide .main-title{font-size:4rem}
+  .persona-layout{grid-template-columns:1fr}
+  .stats-grid,.constraints-grid{grid-template-columns:repeat(2,1fr)}
+  .metrics-grid{grid-template-columns:repeat(2,1fr)}
+  .context-map,.opportunity-map{grid-template-columns:1fr}
+  .context-center,.context-flow,.opp-core,.opp-impact{grid-column:1/2}
+}
+</style>
+</head>
+<body>
+
+<div class="bg-decoration"><div class="bg-blob"></div><div class="bg-blob"></div><div class="bg-blob"></div></div>
+<div class="progress-bar" id="progressBar" style="width:0%"></div>
+<div class="slide-counter" id="slideCounter">01 / 21</div>
+<div class="nav-dots" id="navDots"></div>
+<div class="nav-arrows">
+  <button class="nav-btn" id="prevBtn" onclick="prevSlide()">←</button>
+  <button class="nav-btn" id="nextBtn" onclick="nextSlide()">→</button>
+</div>
+
+<div class="slides-container">
+
+<!-- 1: TITLE -->
+<section class="slide title-slide active" data-slide="0">
+  <div class="animate-in team-badge">DESIGN THINKING — TEAM 2</div>
+  <h1 class="animate-in main-title text-gradient">Dastarkhwan</h1>
+  <p class="animate-in urdu-meaning">The Wedding Food Rescue Platform</p>
+  <div class="animate-in title-divider"></div>
+  <p class="animate-in subtitle">The Urdu/Deccani word for the dining spread laid out for guests — symbolizing generosity without waste.</p>
+  <div class="animate-in" style="margin-top:2.5rem"><p class="text-subtle" style="font-size:0.9rem;letter-spacing:3px">PRESS → OR SCROLL TO BEGIN</p></div>
+</section>
+
+<!-- 2: PROBLEM -->
+<section class="slide" data-slide="1">
+  <div class="animate-in label">THE PROBLEM</div>
+  <h2 class="animate-in heading-lg" style="text-align:center;max-width:950px">How Might We <span class="text-gradient">Reduce Immense Food Waste</span> at Large Hyderabadi Weddings?</h2>
+  <p class="animate-in text-muted" style="text-align:center;max-width:800px;margin-bottom:1.5rem;line-height:1.65;font-size:1.1rem">By seamlessly connecting hosts with local food-rescue NGOs in real-time — bridging the logistics, timing, and trust gap.</p>
+  <div class="animate-in stats-grid">
+    <div class="stat-card"><div class="stat-number text-gold">50,000+</div><div class="stat-label">Large wedding functions in Hyderabad annually</div></div>
+    <div class="stat-card"><div class="stat-number text-rose">150–400 kg</div><div class="stat-label">Surplus food produced per wedding</div></div>
+    <div class="stat-card"><div class="stat-number text-purple">10K–20K</div><div class="stat-label">Tonnes of edible food wasted every year</div></div>
+  </div>
+  <div class="animate-in" style="margin-top:1.2rem">
+    <div class="stat-card" style="max-width:450px;border:2px solid var(--rose-border);background:var(--rose-bg)">
+      <div class="stat-number text-rose" style="font-size:2.5rem">1.5 Million</div>
+      <div class="stat-label">People in Hyderabad face food insecurity</div>
+    </div>
+  </div>
+</section>
+
+<!-- 3: TEAM -->
+<section class="slide" data-slide="2">
+  <div class="animate-in label">TEAM 2</div>
+  <h2 class="animate-in heading-lg text-gradient">Meet The Team</h2>
+  <div class="animate-in title-divider"></div>
+  <div class="animate-in team-grid">
+    <div class="team-member"><div class="team-avatar">S</div><div class="name">Salahuddin</div></div>
+    <div class="team-member"><div class="team-avatar" style="background:linear-gradient(135deg,var(--blue),var(--teal))">A</div><div class="name">Abhinav</div></div>
+    <div class="team-member"><div class="team-avatar" style="background:linear-gradient(135deg,var(--purple),var(--rose))">A</div><div class="name">Abhiram</div></div>
+    <div class="team-member"><div class="team-avatar" style="background:linear-gradient(135deg,var(--rose),var(--orange))">M</div><div class="name">Manogna</div></div>
+    <div class="team-member"><div class="team-avatar" style="background:linear-gradient(135deg,var(--teal),var(--blue))">S</div><div class="name">Sandhya</div></div>
+  </div>
+</section>
+
+<!-- 4: PERSONA 1 -->
+<section class="slide" data-slide="3">
+  <div class="animate-in label" style="align-self:flex-start">PERSONA 1</div>
+  <div class="persona-layout">
+    <div class="animate-in persona-card">
+      <div class="persona-avatar" style="background:linear-gradient(135deg,#d4a843,#f39c12);border-radius:50%">👨</div>
+      <div class="persona-name">Farhan Sharief</div>
+      <div class="persona-role">The Wedding Host</div>
+      <div class="persona-attrs">
+        <div class="persona-attr"><span class="persona-attr-label">Age</span><span class="persona-attr-value">48</span></div>
+        <div class="persona-attr"><span class="persona-attr-label">Job</span><span class="persona-attr-value">Textile business, Begum Bazar</span></div>
+        <div class="persona-attr"><span class="persona-attr-label">Location</span><span class="persona-attr-value">Tolichowki, Hyderabad</span></div>
+        <div class="persona-attr"><span class="persona-attr-label">Family</span><span class="persona-attr-value">Joint family of 12</span></div>
+        <div class="persona-attr"><span class="persona-attr-label">Income</span><span class="persona-attr-value">₹15–20 LPA</span></div>
+        <div class="persona-attr"><span class="persona-attr-label">Tech</span><span class="persona-attr-value">WhatsApp, GPay, YouTube</span></div>
+      </div>
+    </div>
+    <div class="persona-details">
+      <div class="animate-in quote-block">"Log kya kahenge if there isn't enough food? But seeing 200 kg thrown away after the walima breaks my heart."</div>
+      <div class="animate-in detail-section">
+        <h3 style="color:var(--teal)">🎯 Goals</h3>
+        <ul class="goals-list">
+          <li>Ensure guests are generously fed — social reputation depends on it</li>
+          <li>Avoid <em>sharm</em> (embarrassment) of food running short</li>
+          <li>Fulfill personal/religious desire to not waste food (<em>israf</em>)</li>
+          <li>Keep wedding costs from spiraling further</li>
+        </ul>
+      </div>
+      <div class="animate-in detail-section">
+        <h3 style="color:var(--rose)">😤 Frustrations</h3>
+        <ul class="frustrations-list">
+          <li>Caterers push 30–40% overproduction "just in case"</li>
+          <li>No easy way to donate leftover food before it spoils</li>
+          <li>Doesn't know which NGOs operate nearby or at night</li>
+          <li>Fears food safety liability</li>
+          <li>Previous attempt: called NGO at 11 PM — no one answered</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 5: EMPATHY MAP 1 -->
+<section class="slide" data-slide="4">
+  <div class="animate-in label">EMPATHY MAP</div>
+  <h2 class="animate-in heading-md">Farhan Sharief — <span class="text-gold">The Wedding Host</span></h2>
+  <div class="empathy-map">
+    <div class="animate-in empathy-quadrant eq-says">
+      <h4>💬 SAYS</h4>
+      <p>"Order extra biryani, kuch kam nahi hona chahiye." · "Is there any NGO that can pick up food tonight?" · "The caterer said leftover food can't be stored — just throw it."</p>
+    </div>
+    <div class="animate-in empathy-quadrant eq-thinks">
+      <h4>🧠 THINKS</h4>
+      <p>"I don't want to waste, but I can't risk running short in front of 800 guests." · "Who will handle logistics at midnight?" · "What if the NGO doesn't come and food rots?"</p>
+    </div>
+    <div class="animate-in empathy-quadrant eq-feels">
+      <h4>❤️ FEELS</h4>
+      <p><strong>Guilt</strong> seeing dustbins full of biryani · <strong>Anxiety</strong> about food running short · <strong>Helplessness</strong> — wants to do right but lacks a channel · <strong>Pride</strong> when guests praise the spread</p>
+    </div>
+    <div class="animate-in empathy-quadrant eq-does">
+      <h4>🔧 DOES</h4>
+      <p>Orders 30–40% more than RSVP · Asks caterer to pack leftovers · Calls contacts frantically post-event · Ends up discarding surplus when no one responds at night</p>
+    </div>
+  </div>
+</section>
+
+<!-- 6: JOURNEY MAP 1 -->
+<section class="slide" data-slide="5">
+  <div class="animate-in label">CUSTOMER JOURNEY MAP</div>
+  <h2 class="animate-in heading-md">Farhan Sharief — <span class="text-gold">Wedding Host Journey</span></h2>
+  <div class="animate-in journey-container">
+    <div class="journey-timeline">
+      <div class="journey-stage"><div class="journey-dot"></div><div class="journey-stage-card">
+        <h5>1. Planning</h5>
+        <div class="emotion">"Must order generously — izzat ka sawaal hai" 😤</div>
+        <div class="pain">No guidance on right-sizing; caterers incentivized to overcharge</div>
+        <div class="opportunity">Smart food-quantity estimator based on guest count</div>
+      </div></div>
+      <div class="journey-stage"><div class="journey-dot" style="background:var(--blue)"></div><div class="journey-stage-card">
+        <h5>2. Pre-Event</h5>
+        <div class="emotion">"Thoda zyada order kar leta hoon, kam padh gaya toh?" 😰</div>
+        <div class="pain">RSVP culture is weak — attendance unpredictable</div>
+        <div class="opportunity">Pre-registration with food-rescue NGO; schedule pickup</div>
+      </div></div>
+      <div class="journey-stage"><div class="journey-dot" style="background:var(--teal)"></div><div class="journey-stage-card">
+        <h5>3. D-Day</h5>
+        <div class="emotion">"3rd batch bhi bana do just in case" 😊→😟</div>
+        <div class="pain">Real-time surplus invisible; no tracking</div>
+        <div class="opportunity">Live surplus dashboard for host & NGO</div>
+      </div></div>
+      <div class="journey-stage"><div class="journey-dot" style="background:var(--rose)"></div><div class="journey-stage-card">
+        <h5>4. Post-Event</h5>
+        <div class="emotion">"Bahut bacha hai… kisko doon itni raat ko?" 😩</div>
+        <div class="pain">Midnight timing; food safety clock ticking</div>
+        <div class="opportunity">One-tap SOS to nearest verified NGO with live ETA</div>
+      </div></div>
+      <div class="journey-stage"><div class="journey-dot" style="background:var(--purple)"></div><div class="journey-stage-card">
+        <h5>5. Aftermath</h5>
+        <div class="emotion">"Kitna khaana barbaad hua… Allah maaf kare" 😢</div>
+        <div class="pain">Guilt, no data on saved vs. wasted</div>
+        <div class="opportunity">Impact receipt — "You donated 120 kg, fed 300 people"</div>
+      </div></div>
+    </div>
+  </div>
+</section>
+
+<!-- 7: PERSONA 2 -->
+<section class="slide" data-slide="6">
+  <div class="animate-in label" style="align-self:flex-start">PERSONA 2</div>
+  <div class="persona-layout">
+    <div class="animate-in persona-card">
+      <div class="persona-avatar" style="background:linear-gradient(135deg,#e8505b,#8b5cf6);border-radius:50%">👩</div>
+      <div class="persona-name">Priya Reddy</div>
+      <div class="persona-role">Food-Rescue NGO Coordinator</div>
+      <div class="persona-attrs">
+        <div class="persona-attr"><span class="persona-attr-label">Age</span><span class="persona-attr-value">31</span></div>
+        <div class="persona-attr"><span class="persona-attr-label">Job</span><span class="persona-attr-value">Ops Lead, Annapurna Food Rescue</span></div>
+        <div class="persona-attr"><span class="persona-attr-label">Location</span><span class="persona-attr-value">Kukatpally → Old City</span></div>
+        <div class="persona-attr"><span class="persona-attr-label">Team</span><span class="persona-attr-value">8 volunteers, 2 vans</span></div>
+        <div class="persona-attr"><span class="persona-attr-label">Tech</span><span class="persona-attr-value">Sheets, WhatsApp Biz, CRM</span></div>
+      </div>
+    </div>
+    <div class="persona-details">
+      <div class="animate-in quote-block" style="border-left-color:var(--rose)">"We have the vans and volunteers. What we don't have is advance notice. By the time someone calls, the food is already half-spoiled."</div>
+      <div class="animate-in detail-section">
+        <h3 style="color:var(--teal)">🎯 Goals</h3>
+        <ul class="goals-list">
+          <li>Maximize volume of rescued food per night</li>
+          <li>Reduce response time (currently ~90 min avg.)</li>
+          <li>Build reliable pipeline of food donors</li>
+          <li>Maintain food safety standards for beneficiaries</li>
+        </ul>
+      </div>
+      <div class="animate-in detail-section">
+        <h3 style="color:var(--rose)">😤 Frustrations</h3>
+        <ul class="frustrations-list">
+          <li>Calls come at random hours with no advance notice</li>
+          <li>Can't plan volunteer shifts or van routes</li>
+          <li>No way to verify food quality before dispatching</li>
+          <li>Donors cancel last minute or food is spoiled on arrival</li>
+          <li>Every wasted trip costs diesel, time, and morale</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 8: EMPATHY MAP 2 -->
+<section class="slide" data-slide="7">
+  <div class="animate-in label">EMPATHY MAP</div>
+  <h2 class="animate-in heading-md">Priya Reddy — <span class="text-rose">The NGO Coordinator</span></h2>
+  <div class="empathy-map">
+    <div class="animate-in empathy-quadrant eq-says">
+      <h4>💬 SAYS</h4>
+      <p>"If only they'd told us 2 hours earlier, we could have saved 200 kg." · "We need photos before we send a van." · "My volunteers are burning out from midnight calls."</p>
+    </div>
+    <div class="animate-in empathy-quadrant eq-thinks">
+      <h4>🧠 THINKS</h4>
+      <p>"There must be a better way to get advance notice." · "How do I scale from 3 pickups/night to 10?" · "Food safety is non-negotiable — one incident and our reputation is gone."</p>
+    </div>
+    <div class="animate-in empathy-quadrant eq-feels">
+      <h4>❤️ FEELS</h4>
+      <p><strong>Frustrated</strong> by reactive chaos · <strong>Passionate</strong> — every kg saved = 3 meals · <strong>Overwhelmed</strong> — demand outstrips capacity · <strong>Proud</strong> when beneficiaries send thanks</p>
+    </div>
+    <div class="animate-in empathy-quadrant eq-does">
+      <h4>🔧 DOES</h4>
+      <p>Checks WhatsApp every 30 min after 9 PM · Routes vans manually on gut feel · Rejects ~30% of calls for safety · Documents every pickup with photos</p>
+    </div>
+  </div>
+</section>
+
+<!-- 9: JOURNEY MAP 2 -->
+<section class="slide" data-slide="8">
+  <div class="animate-in label">CUSTOMER JOURNEY MAP</div>
+  <h2 class="animate-in heading-md">Priya Reddy — <span class="text-rose">NGO Coordinator Journey</span></h2>
+  <div class="animate-in journey-container">
+    <div class="journey-timeline">
+      <div class="journey-stage"><div class="journey-dot" style="background:var(--rose)"></div><div class="journey-stage-card">
+        <h5>1. Awaiting Alerts</h5>
+        <div class="emotion">"4 weddings in Tolichowki tonight — will anyone call?" 🤞</div>
+        <div class="pain">No proactive pipeline; relies on inbound calls</div>
+        <div class="opportunity">Pre-scheduled alerts from registered hosts</div>
+      </div></div>
+      <div class="journey-stage"><div class="journey-dot" style="background:var(--rose)"></div><div class="journey-stage-card">
+        <h5>2. Receiving Request</h5>
+        <div class="emotion">"Is the food still safe? How long sitting out?" 🤔</div>
+        <div class="pain">Incomplete info; can't verify remotely</div>
+        <div class="opportunity">Structured form: photo, food type, timestamp</div>
+      </div></div>
+      <div class="journey-stage"><div class="journey-dot" style="background:var(--rose)"></div><div class="journey-stage-card">
+        <h5>3. Dispatching Van</h5>
+        <div class="emotion">"Hope we reach in time — biryani spoils fast" 😬</div>
+        <div class="pain">Manual routing; no real-time tracking</div>
+        <div class="opportunity">Auto route optimization + live van tracking</div>
+      </div></div>
+      <div class="journey-stage"><div class="journey-dot" style="background:var(--rose)"></div><div class="journey-stage-card">
+        <h5>4. Pickup & Check</h5>
+        <div class="emotion">"Paneer is fine, but raita sat too long" 🧐</div>
+        <div class="pain">No standardized checklist; hosts get offended</div>
+        <div class="opportunity">Digital food-safety checklist with templates</div>
+      </div></div>
+      <div class="journey-stage"><div class="journey-dot" style="background:var(--rose)"></div><div class="journey-stage-card">
+        <h5>5. Distribution</h5>
+        <div class="emotion">"120 kg saved! But I'm exhausted…" 😊😴</div>
+        <div class="pain">Manual reporting; donors never see outcome</div>
+        <div class="opportunity">Auto impact report with photos & GPS</div>
+      </div></div>
+    </div>
+  </div>
+</section>
+
+<!-- 10: PERSONA 3 -->
+<section class="slide" data-slide="9">
+  <div class="animate-in label" style="align-self:flex-start">PERSONA 3</div>
+  <div class="persona-layout">
+    <div class="animate-in persona-card">
+      <div class="persona-avatar" style="background:linear-gradient(135deg,#00b894,#4a90d9);border-radius:50%">👨‍🍳</div>
+      <div class="persona-name">Ramesh Babu</div>
+      <div class="persona-role">The Wedding Caterer</div>
+      <div class="persona-attrs">
+        <div class="persona-attr"><span class="persona-attr-label">Age</span><span class="persona-attr-value">55</span></div>
+        <div class="persona-attr"><span class="persona-attr-label">Job</span><span class="persona-attr-value">Owner, Babu Catering Services</span></div>
+        <div class="persona-attr"><span class="persona-attr-label">Location</span><span class="persona-attr-value">Mehdipatnam, Hyderabad</span></div>
+        <div class="persona-attr"><span class="persona-attr-label">Team</span><span class="persona-attr-value">25 cooks, 40 serving staff</span></div>
+        <div class="persona-attr"><span class="persona-attr-label">Revenue</span><span class="persona-attr-value">₹80L–1.2 Cr/yr</span></div>
+        <div class="persona-attr"><span class="persona-attr-label">Tech</span><span class="persona-attr-value">Basic phone; relies on son</span></div>
+      </div>
+    </div>
+    <div class="persona-details">
+      <div class="animate-in quote-block" style="border-left-color:var(--teal)">"Mera kaam hai khaana banana aur serve karna. Bacha hua khaana leke jaana — that's not my headache."</div>
+      <div class="animate-in detail-section">
+        <h3 style="color:var(--teal)">🎯 Goals</h3>
+        <ul class="goals-list">
+          <li>Satisfy the host — ensure no food shortage complaints</li>
+          <li>Maximize per-plate revenue by upselling quantity</li>
+          <li>Maintain reputation for lavish, generous spreads</li>
+          <li>Minimize his own post-event cleanup burden</li>
+        </ul>
+      </div>
+      <div class="animate-in detail-section">
+        <h3 style="color:var(--rose)">😤 Frustrations</h3>
+        <ul class="frustrations-list">
+          <li>Hosts blame caterer if food runs short — so he over-produces</li>
+          <li>Leftover disposal is a hassle — venue staff dump it</li>
+          <li>FSSAI compliance is vague and rarely enforced</li>
+          <li>Revenue model rewards overproduction — no incentive to reduce</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 11: EMPATHY MAP 3 -->
+<section class="slide" data-slide="10">
+  <div class="animate-in label">EMPATHY MAP</div>
+  <h2 class="animate-in heading-md">Ramesh Babu — <span class="text-teal">The Wedding Caterer</span></h2>
+  <div class="empathy-map">
+    <div class="animate-in empathy-quadrant eq-says">
+      <h4>💬 SAYS</h4>
+      <p>"Kam pad gaya toh meri reputation khatam — zyada bana lo." · "Donation? That's the host's decision." · "FSSAI wale kabhi function pe nahi aate."</p>
+    </div>
+    <div class="animate-in empathy-quadrant eq-thinks">
+      <h4>🧠 THINKS</h4>
+      <p>"If I reduce quantities and food runs short, I lose the client forever." · "Waste is the cost of doing business." · "If someone gets sick from donated food, will they blame me?"</p>
+    </div>
+    <div class="animate-in empathy-quadrant eq-feels">
+      <h4>❤️ FEELS</h4>
+      <p><strong>Indifferent</strong> — waste is normalized · <strong>Protective</strong> of reputation — will always over-produce · <strong>Anxious</strong> about liability · <strong>Curious</strong> if waste reduction could save money</p>
+    </div>
+    <div class="animate-in empathy-quadrant eq-does">
+      <h4>🔧 DOES</h4>
+      <p>Cooks 30–40% extra as standard · Leaves leftovers at venue · Never tracks waste · Would cooperate with NGO <strong>only if host instructs</strong></p>
+    </div>
+  </div>
+</section>
+
+<!-- 12: JOURNEY MAP 3 -->
+<section class="slide" data-slide="11">
+  <div class="animate-in label">CUSTOMER JOURNEY MAP</div>
+  <h2 class="animate-in heading-md">Ramesh Babu — <span class="text-teal">Caterer Journey</span></h2>
+  <div class="animate-in journey-container">
+    <div class="journey-timeline">
+      <div class="journey-stage"><div class="journey-dot" style="background:var(--teal)"></div><div class="journey-stage-card">
+        <h5>1. Booking & Menu</h5>
+        <div class="emotion">"800 guests? I'll prepare for 1,100 — safe side" 💰</div>
+        <div class="pain">Revenue model rewards overproduction</div>
+        <div class="opportunity">Data-driven portion calculator</div>
+      </div></div>
+      <div class="journey-stage"><div class="journey-dot" style="background:var(--teal)"></div><div class="journey-stage-card">
+        <h5>2. Procurement</h5>
+        <div class="emotion">"Better extra rice than shortage mid-event" 🛒</div>
+        <div class="pain">Bulk buying with no precision</div>
+        <div class="opportunity">Ingredient optimizer linked to guest estimate</div>
+      </div></div>
+      <div class="journey-stage"><div class="journey-dot" style="background:var(--teal)"></div><div class="journey-stage-card">
+        <h5>3. Cooking & Serving</h5>
+        <div class="emotion">"Empty counter = bad image" 👨‍🍳</div>
+        <div class="pain">No consumption tracking; visual guesswork</div>
+        <div class="opportunity">Smart serving counter sensors / tally system</div>
+      </div></div>
+      <div class="journey-stage"><div class="journey-dot" style="background:var(--teal)"></div><div class="journey-stage-card">
+        <h5>4. Wind-down</h5>
+        <div class="emotion">"Mera kaam ho gaya, host dekh lega" 😮‍💨</div>
+        <div class="pain">No incentive for leftover handling</div>
+        <div class="opportunity">Tax benefit, "Zero Waste Caterer" badge</div>
+      </div></div>
+      <div class="journey-stage"><div class="journey-dot" style="background:var(--teal)"></div><div class="journey-stage-card">
+        <h5>5. Disposal</h5>
+        <div class="emotion">(Not Ramesh's concern anymore)</div>
+        <div class="pain">Massive cost externalized to environment</div>
+        <div class="opportunity">Mandatory surplus handoff in contract</div>
+      </div></div>
+    </div>
+  </div>
+</section>
+
+<!-- 13: DESIGN BRIEF -->
+<section class="slide" data-slide="12">
+  <div class="animate-in label">DESIGN BRIEF</div>
+  <h2 class="animate-in heading-lg text-gradient" style="text-align:center">"Dastarkhwan"</h2>
+  <p class="animate-in text-muted" style="text-align:center;margin-bottom:1rem;font-size:1.2rem">The Wedding Food Rescue Platform</p>
+  <div class="animate-in brief-layout">
+    <div class="challenge-text">Design a real-time, trust-building platform that seamlessly connects Hyderabadi wedding hosts and caterers with verified food-rescue NGOs — enabling pre-planned and on-demand surplus food pickup that is <strong style="color:var(--gold)">safe, dignified, and rewarding</strong> for all parties.</div>
+  </div>
+  <div class="animate-in target-users" style="max-width:900px">
+    <div class="target-user-card"><div class="tu-icon">👨‍👩‍👧‍👦</div><h4 class="text-gold">Primary</h4><p>Wedding hosts organizing Deccani/Telugu/Marwari functions</p></div>
+    <div class="target-user-card"><div class="tu-icon">👨‍🍳</div><h4 class="text-rose">Secondary</h4><p>Caterers & event planners controlling food production</p></div>
+    <div class="target-user-card"><div class="tu-icon">🚐</div><h4 class="text-teal">Tertiary</h4><p>Food-rescue NGOs & volunteer networks</p></div>
+  </div>
+</section>
+
+<!-- 14: STAKEHOLDER MAP (HTML) -->
+<section class="slide" data-slide="13" style="justify-content:flex-start;padding-top:35px">
+  <div class="animate-in label">STAKEHOLDER MAP</div>
+  <h2 class="animate-in heading-md" style="margin-bottom:0.8rem">Ecosystem of <span class="text-gradient">Stakeholders</span></h2>
+  <div class="animate-in map-container">
+    <div class="stakeholder-map">
+      <!-- Center Mission -->
+      <div class="stake-center">
+        <div class="sc-icon">🤲</div>
+        <strong>MISSION</strong>
+        <p>Ensure safe surplus food from weddings reaches those in need — zero hassle, maximum impact</p>
+      </div>
+      <!-- Legend -->
+      <div class="stake-legend">
+        <span class="legend-primary">Primary (Directly Involved)</span>
+        <span class="legend-secondary">Secondary (Indirectly Involved)</span>
+        <span class="legend-tertiary">Tertiary (Enablers)</span>
+      </div>
+      <!-- Primary -->
+      <div class="stake-ring">
+        <div class="stake-card primary"><h5>👨‍👩‍👧‍👦 Wedding Hosts</h5><ul><li>Plan & host wedding</li><li>Generate surplus food</li><li>Seek hassle-free donation</li></ul></div>
+        <div class="stake-card primary"><h5>❤️ Food-Rescue NGOs</h5><ul><li>Receive food requests</li><li>Deploy volunteers</li><li>Safe collection & redistribution</li></ul></div>
+        <div class="stake-card primary"><h5>👨‍🍳 Caterers & Suppliers</h5><ul><li>Estimate food quantity</li><li>Follow food safety norms</li><li>Enable proper packaging</li></ul></div>
+      </div>
+      <!-- Secondary -->
+      <div class="stake-ring">
+        <div class="stake-card secondary"><h5>🏛️ Venue Managers</h5><ul><li>Facilitate logistics</li><li>Provide storage space</li><li>Coordinate handover</li></ul></div>
+        <div class="stake-card secondary"><h5>🙋 Volunteers</h5><ul><li>Collect & transport food</li><li>Ensure hygiene & safety</li><li>On-ground coordination</li></ul></div>
+        <div class="stake-card secondary"><h5>🏥 Beneficiaries</h5><ul><li>Shelters, orphanages</li><li>Elderly homes, night shelters</li><li>Slum communities</li></ul></div>
+        <div class="stake-card secondary"><h5>🏛️ Govt (GHMC, FSSAI)</h5><ul><li>Policy support</li><li>Awareness campaigns</li><li>Facilitate partnerships</li></ul></div>
+      </div>
+      <!-- Tertiary -->
+      <div class="stake-ring">
+        <div class="stake-card tertiary"><h5>🚛 Logistics Partners</h5><ul><li>Provide vehicles</li><li>Timely transportation</li></ul></div>
+        <div class="stake-card tertiary"><h5>📱 Tech Platform</h5><ul><li>Real-time matching</li><li>Tracking & reporting</li></ul></div>
+        <div class="stake-card tertiary"><h5>📰 Media & Influencers</h5><ul><li>Spread awareness</li><li>Showcase impact stories</li></ul></div>
+        <div class="stake-card tertiary"><h5>🏢 CSR Partners</h5><ul><li>Provide funding</li><li>Organize drives</li></ul></div>
+        <div class="stake-card tertiary"><h5>📦 Packaging Suppliers</h5><ul><li>Food-safe packaging</li><li>Eco-friendly materials</li></ul></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 15: CONTEXT MAP (HTML) -->
+<section class="slide" data-slide="14" style="justify-content:flex-start;padding-top:35px">
+  <div class="animate-in label">CONTEXT MAP</div>
+  <h2 class="animate-in heading-md" style="margin-bottom:0.8rem">Understanding the <span class="text-gradient">Context</span></h2>
+  <div class="animate-in map-container">
+    <div class="context-map">
+      <div class="context-center">
+        <h4>🏛️ Tons of perfectly good food is wasted every day at large wedding functions in Hyderabad</h4>
+        <p>Due to poor coordination, timing mismatches, and lack of real-time connection between hosts and food-rescue NGOs</p>
+      </div>
+      <div class="context-card" style="border-top-color:var(--blue)">
+        <h5>👥 People</h5>
+        <ul><li>Wedding Hosts & Families</li><li>Event Planners & Caterers</li><li>Food-Rescue NGOs</li><li>Volunteers</li><li>Beneficiaries (orphanages, shelters)</li><li>Guests/Attendees</li></ul>
+      </div>
+      <div class="context-card" style="border-top-color:var(--teal)">
+        <h5>📍 Places</h5>
+        <ul><li>Wedding Venues, Banquet Halls</li><li>Catering Kitchens (on/off-site)</li><li>Storage Areas, Cold Rooms</li><li>NGO Centers, Shelters</li><li>Transport Routes</li></ul>
+      </div>
+      <div class="context-card" style="border-top-color:var(--purple)">
+        <h5>📦 Things</h5>
+        <ul><li>Surplus Cooked Food</li><li>Containers, Foil Trays, Insulated Boxes</li><li>Vans, Tempos, Two-Wheelers</li><li>Refrigerators, Thermal Bags</li><li>Mobile App, GPS, Dashboards</li></ul>
+      </div>
+      <!-- Flows -->
+      <div class="context-flow">
+        <div class="flow-item" style="border-left:3px solid var(--gold)">🍽️ Food: Prep → Serve → Surplus → Collect → Distribute</div>
+        <div class="flow-item" style="border-left:3px solid var(--blue)">📡 Info: Surplus availability ↔ NGO availability ↔ Confirmation</div>
+        <div class="flow-item" style="border-left:3px solid var(--teal)">🚐 Logistics: Request → Route → Transport → Handover</div>
+        <div class="flow-item" style="border-left:3px solid var(--rose)">📊 Impact: Food saved → People fed → Tracked & Reported</div>
+      </div>
+      <!-- Pain Points -->
+      <div class="context-card" style="border-top-color:var(--rose);grid-column:1/4">
+        <h5 style="color:var(--rose)">⚠️ Key Pain Points in Context</h5>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:0.5rem">
+          <ul><li>No real-time visibility of surplus</li><li>Last-minute coordination → missed pickups</li></ul>
+          <ul><li>Lack of trust & verification</li><li>Food safety & handling concerns</li></ul>
+          <ul><li>Hosts unaware of NGOs</li><li>No data or proof of impact</li></ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 16: OPPORTUNITY MAP (HTML) -->
+<section class="slide" data-slide="15" style="justify-content:flex-start;padding-top:35px">
+  <div class="animate-in label">OPPORTUNITY MAP</div>
+  <h2 class="animate-in heading-md" style="margin-bottom:0.8rem">Zero Food Waste. <span class="text-gradient">Maximum Impact.</span></h2>
+  <div class="animate-in map-container">
+    <div class="opportunity-map">
+      <div class="opp-core">
+        <h4>💡 CORE OPPORTUNITY</h4>
+        <p>Build a trusted, real-time, end-to-end system that makes food donation at weddings effortless, immediate, and impactful — turning excess into nourishment, not waste.</p>
+      </div>
+      <div class="opp-card"><div class="opp-num">01</div><h5>Real-Time Matching & Alerts</h5><p>Instantly connect hosts with nearest available NGOs for quick response</p></div>
+      <div class="opp-card"><div class="opp-num">02</div><h5>Trust & Verified Ecosystem</h5><p>Verified NGOs, reviews, ratings & transparency build host confidence</p></div>
+      <div class="opp-card"><div class="opp-num">03</div><h5>Smart Logistics & Coordination</h5><p>Optimize routes, provide transport partners, cold storage & packaging support</p></div>
+      <div class="opp-card"><div class="opp-num">04</div><h5>Standardization & Food Safety</h5><p>Simple guidelines, packaging kits, and checklists ensure safe collection</p></div>
+      <div class="opp-card"><div class="opp-num">05</div><h5>Impact Tracking & Recognition</h5><p>Show real impact: meals served, communities helped. Recognize generous hosts</p></div>
+      <div class="opp-card"><div class="opp-num">06</div><h5>Awareness & Behavior Change</h5><p>Make food donation a respected norm through campaigns, nudges & social validation</p></div>
+      <!-- Impact -->
+      <div class="opp-impact">
+        <div class="opp-impact-item"><div class="ii-icon">🎯</div><p>Zero waste, maximum meals</p></div>
+        <div class="opp-impact-item"><div class="ii-icon">🤝</div><p>Stronger communities</p></div>
+        <div class="opp-impact-item"><div class="ii-icon">🌱</div><p>Reduced carbon footprint</p></div>
+        <div class="opp-impact-item"><div class="ii-icon">✅</div><p>Trusted ecosystem</p></div>
+        <div class="opp-impact-item"><div class="ii-icon">🏙️</div><p>Hyderabad as model city</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 17: SCOPE -->
+<section class="slide" data-slide="16">
+  <div class="animate-in label">SCOPE & CONSTRAINTS</div>
+  <h2 class="animate-in heading-md" style="text-align:center">Design <span class="text-gradient">Boundaries</span></h2>
+  <div class="animate-in constraints-grid">
+    <div class="constraint-card"><div class="cc-icon">📍</div><h4>Geography</h4><p>Hyderabad — Tolichowki, Mehdipatnam, Jubilee Hills, LB Nagar, Kompally</p></div>
+    <div class="constraint-card"><div class="cc-icon">⏱️</div><h4>Time Sensitivity</h4><p>Pickup within <strong>2 hours</strong> of event end (FSSAI guidelines)</p></div>
+    <div class="constraint-card"><div class="cc-icon">🌐</div><h4>Language</h4><p>Support <strong>English, Telugu, Urdu, and Hindi</strong></p></div>
+    <div class="constraint-card"><div class="cc-icon">📱</div><h4>Tech Constraints</h4><p>Works on low-end Android; offline-capable for low-network venues</p></div>
+    <div class="constraint-card"><div class="cc-icon">🕌</div><h4>Cultural Sensitivity</h4><p>Never "cutting food" — always <strong>"extending generosity beyond the event"</strong></p></div>
+    <div class="constraint-card"><div class="cc-icon">⚖️</div><h4>Legal & Budget</h4><p>FSSAI-aligned, Good Samaritan protections. NGO/CSR-funded or self-sustaining.</p></div>
+  </div>
+</section>
+
+<!-- 18: PRINCIPLES -->
+<section class="slide" data-slide="17">
+  <div class="animate-in label">DESIGN PRINCIPLES</div>
+  <h2 class="animate-in heading-md" style="text-align:center">Our Guiding <span class="text-gradient">Principles</span></h2>
+  <div class="animate-in principles-list">
+    <div class="principle-item"><div class="principle-num">01</div><div class="principle-content"><h4>Dignity First</h4><p>Food rescue should feel like an act of <em>generosity</em>, not charity or guilt</p></div></div>
+    <div class="principle-item"><div class="principle-num">02</div><div class="principle-content"><h4>Zero Friction at Midnight</h4><p>Must work when the host is exhausted, at 12 AM, with one tap</p></div></div>
+    <div class="principle-item"><div class="principle-num">03</div><div class="principle-content"><h4>Trust Through Transparency</h4><p>Real-time tracking, photo proof, and impact reports build repeat behavior</p></div></div>
+    <div class="principle-item"><div class="principle-num">04</div><div class="principle-content"><h4>Caterer as Ally, Not Obstacle</h4><p>Incentivize caterers to participate, don't bypass them</p></div></div>
+    <div class="principle-item"><div class="principle-num">05</div><div class="principle-content"><h4>Cultural Resonance</h4><p>Deccani/Hyderabadi idioms, visuals, and references for emotional connection</p></div></div>
+  </div>
+</section>
+
+<!-- 19: METRICS -->
+<section class="slide" data-slide="18">
+  <div class="animate-in label">SUCCESS METRICS — YEAR 1</div>
+  <h2 class="animate-in heading-md" style="text-align:center">Measuring <span class="text-gradient">Impact</span></h2>
+  <div class="animate-in metrics-grid">
+    <div class="metric-card"><div class="metric-value text-gold">2,000+</div><div class="metric-label">Weddings registered</div></div>
+    <div class="metric-card"><div class="metric-value text-teal">500+</div><div class="metric-label">Tonnes of food rescued</div></div>
+    <div class="metric-card"><div class="metric-value text-rose">&lt;45 min</div><div class="metric-label">Avg. pickup response time</div></div>
+    <div class="metric-card"><div class="metric-value text-purple">&gt;4.5/5</div><div class="metric-label">Host satisfaction score</div></div>
+    <div class="metric-card"><div class="metric-value text-blue">&gt;80%</div><div class="metric-label">NGO partner retention</div></div>
+    <div class="metric-card"><div class="metric-value text-gold">100+</div><div class="metric-label">Zero Waste Caterers</div></div>
+    <div class="metric-card" style="grid-column:span 2"><div class="metric-value text-teal">&gt;40%</div><div class="metric-label">Repeat host usage — proving lasting behavior change</div></div>
+  </div>
+</section>
+
+<!-- 20: DELIVERABLES -->
+<section class="slide" data-slide="19">
+  <div class="animate-in label">DELIVERABLES</div>
+  <h2 class="animate-in heading-md" style="text-align:center">What We're <span class="text-gradient">Building</span></h2>
+  <div class="animate-in deliverables-grid">
+    <div class="deliverable-card"><div class="dc-icon">📱</div><h4>Mobile-First PWA</h4><p>Responsive web app for any device, even low-end Android</p></div>
+    <div class="deliverable-card"><div class="dc-icon">💬</div><h4>WhatsApp Integration</h4><p>Business API for non-app users — zero learning curve</p></div>
+    <div class="deliverable-card"><div class="dc-icon">🖥️</div><h4>NGO Dispatch Dashboard</h4><p>Web command center for pickups & volunteers</p></div>
+    <div class="deliverable-card"><div class="dc-icon">🤝</div><h4>Caterer Onboarding Kit</h4><p>Toolkit to bring caterers in as allies</p></div>
+    <div class="deliverable-card"><div class="dc-icon">📊</div><h4>Impact Reporting Engine</h4><p>Auto reports with photos, GPS, beneficiary count</p></div>
+    <div class="deliverable-card"><div class="dc-icon">📢</div><h4>Community Campaign Kit</h4><p>Awareness via mosques, mandirs & community networks</p></div>
+  </div>
+</section>
+
+<!-- 21: THANK YOU -->
+<section class="slide thankyou-slide" data-slide="20">
+  <div class="animate-in heart">🤲</div>
+  <h2 class="animate-in heading-xl text-gradient" style="margin-top:0.8rem">Shukran.</h2>
+  <p class="animate-in subtitle" style="margin-top:0.8rem">Extending generosity beyond the event — one Dastarkhwan at a time.</p>
+  <div class="animate-in title-divider" style="margin-top:1.5rem"></div>
+  <div class="animate-in" style="margin-top:1.5rem">
+    <p class="text-gold" style="font-size:1.15rem;font-weight:700;letter-spacing:4px">TEAM 2</p>
+    <p class="text-muted" style="margin-top:0.6rem;font-size:1.1rem">Salahuddin · Abhinav · Abhiram · Manogna · Sandhya</p>
+  </div>
+  <div class="animate-in" style="margin-top:1.5rem"><p class="text-subtle" style="font-size:0.85rem;letter-spacing:3px">DESIGN THINKING PROJECT · 2025</p></div>
+</section>
+
+</div>
+
+<script>
+// ===== SETUP =====
+const slides = document.querySelectorAll('.slide');
+const totalSlides = slides.length;
+let currentSlide = 0;
+let isAnimating = false;
+
+// Create nav dots
+const navDotsContainer = document.getElementById('navDots');
+for (let i = 0; i < totalSlides; i++) {
+  const dot = document.createElement('button');
+  dot.className = 'nav-dot' + (i === 0 ? ' active' : '');
+  dot.addEventListener('click', function() { goToSlide(i); });
+  navDotsContainer.appendChild(dot);
+}
+
+function updateUI() {
+  const pct = totalSlides > 1 ? (currentSlide / (totalSlides - 1)) * 100 : 0;
+  document.getElementById('progressBar').style.width = pct + '%';
+  document.getElementById('slideCounter').textContent =
+    String(currentSlide + 1).padStart(2, '0') + ' / ' + String(totalSlides).padStart(2, '0');
+  document.querySelectorAll('.nav-dot').forEach(function(d, i) {
+    d.classList.toggle('active', i === currentSlide);
+  });
+  document.getElementById('prevBtn').disabled = (currentSlide === 0);
+  document.getElementById('nextBtn').disabled = (currentSlide === totalSlides - 1);
+}
+
+function goToSlide(index) {
+  if (isAnimating || index === currentSlide || index < 0 || index >= totalSlides) return;
+  isAnimating = true;
+
+  var goingForward = index > currentSlide;
+  var outgoing = slides[currentSlide];
+  var incoming = slides[index];
+
+  // 1) Reset entry animations on the incoming slide
+  incoming.querySelectorAll('.animate-in').forEach(function(el) {
+    el.style.animation = 'none';
+    el.offsetHeight;
+    el.style.animation = '';
+  });
+
+  // 2) Position incoming off-screen WITHOUT transition
+  incoming.classList.remove('active', 'transitioning');
+  incoming.style.transform = goingForward ? 'translateX(70px)' : 'translateX(-70px)';
+  incoming.style.opacity = '0';
+  incoming.style.visibility = 'visible';
+  incoming.style.pointerEvents = 'none';
+
+  // Force browser to paint the starting position
+  incoming.offsetHeight;
+
+  // 3) Now add transitioning class and animate both slides
+  incoming.classList.add('transitioning');
+  outgoing.classList.add('transitioning');
+
+  // Double rAF ensures the browser has committed the starting position
+  requestAnimationFrame(function() {
+    requestAnimationFrame(function() {
+      // Animate incoming to center
+      incoming.style.transform = 'translateX(0)';
+      incoming.style.opacity = '1';
+
+      // Animate outgoing away
+      outgoing.style.transform = goingForward ? 'translateX(-70px)' : 'translateX(70px)';
+      outgoing.style.opacity = '0';
+    });
+  });
+
+  currentSlide = index;
+  updateUI();
+
+  // 4) After transition completes, clean up classes and inline styles
+  setTimeout(function() {
+    // Clean outgoing: disable transition to prevent flash, then reset
+    outgoing.classList.remove('transitioning', 'active');
+    outgoing.style.transition = 'none';
+    outgoing.style.transform = '';
+    outgoing.style.opacity = '';
+    outgoing.style.visibility = '';
+    outgoing.style.pointerEvents = '';
+    outgoing.offsetHeight; // force repaint
+    outgoing.style.transition = '';
+
+    // Finalize incoming: set active, remove inline overrides
+    incoming.classList.remove('transitioning');
+    incoming.classList.add('active');
+    incoming.style.transform = '';
+    incoming.style.opacity = '';
+    incoming.style.visibility = '';
+    incoming.style.pointerEvents = '';
+
+    isAnimating = false;
+  }, 550);
+}
+
+function nextSlide() { goToSlide(currentSlide + 1); }
+function prevSlide() { goToSlide(currentSlide - 1); }
+
+// Keyboard navigation
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); nextSlide(); }
+  if (e.key === 'ArrowLeft') { e.preventDefault(); prevSlide(); }
+  if (e.key === 'Home') { e.preventDefault(); goToSlide(0); }
+  if (e.key === 'End') { e.preventDefault(); goToSlide(totalSlides - 1); }
+});
+
+// Click navigation on arrows (use addEventListener for reliability)
+document.getElementById('prevBtn').addEventListener('click', prevSlide);
+document.getElementById('nextBtn').addEventListener('click', nextSlide);
+
+// Touch / Swipe
+var touchStartX = 0;
+document.addEventListener('touchstart', function(e) {
+  touchStartX = e.changedTouches[0].screenX;
+}, { passive: true });
+document.addEventListener('touchend', function(e) {
+  var diff = touchStartX - e.changedTouches[0].screenX;
+  if (Math.abs(diff) > 60) {
+    if (diff > 0) nextSlide(); else prevSlide();
+  }
+}, { passive: true });
+
+// Mouse wheel (debounced)
+var wheelTimer = null;
+document.addEventListener('wheel', function(e) {
+  if (wheelTimer) return;
+  wheelTimer = setTimeout(function() { wheelTimer = null; }, 700);
+  if (e.deltaY > 0) nextSlide();
+  else if (e.deltaY < 0) prevSlide();
+}, { passive: true });
+
+// Initial state
+updateUI();
+slides[0].querySelectorAll('.animate-in').forEach(function(el) {
+  el.style.animation = 'none';
+  el.offsetHeight;
+  el.style.animation = '';
+});
+</script>
+</body>
+</html>
