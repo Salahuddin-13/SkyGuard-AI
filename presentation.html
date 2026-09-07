@@ -149,13 +149,21 @@ body{font-family:'Inter',sans-serif;background:#f0f2f8;color:#1a1a2e;overflow:hi
 .journey-stage-card .opportunity::before{content:'💡 '}
 
 /* DESIGN BRIEF */
-.brief-layout{max-width:950px;text-align:center}
-.challenge-text{font-family:'Cormorant Garamond',serif;font-size:1.4rem;line-height:1.7;color:var(--text-muted);margin-top:1.2rem;padding:1.5rem 2rem;border:2px solid var(--gold-border);border-radius:16px;background:var(--gold-bg)}
-.target-users{display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem;margin-top:1.5rem;width:100%}
-.target-user-card{padding:1.4rem;background:var(--bg-card);border:1px solid var(--border);border-radius:14px;text-align:center;box-shadow:var(--shadow)}
-.target-user-card .tu-icon{font-size:2.5rem;margin-bottom:0.6rem}
-.target-user-card h4{font-size:0.85rem;font-weight:700;text-transform:uppercase;letter-spacing:2px;margin-bottom:0.4rem}
-.target-user-card p{font-size:1rem;color:var(--text-muted);line-height:1.45}
+.brief-layout{width:100%;max-width:1150px;display:flex;flex-direction:column;gap:1rem;margin-top:0.5rem}
+.brief-hero{background:var(--bg-card);border:2px solid var(--gold-border);border-radius:16px;padding:1.3rem 1.8rem;box-shadow:var(--shadow);text-align:left;position:relative}
+.brief-hero-badge{display:inline-block;font-size:0.8rem;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--gold);background:var(--gold-bg);padding:4px 14px;border-radius:20px;margin-bottom:0.5rem}
+.brief-challenge{font-family:'Playfair Display',serif;font-size:1.45rem;font-weight:700;color:var(--text);line-height:1.4;margin-bottom:0.6rem}
+.brief-goal{font-size:1.05rem;color:var(--teal);font-weight:600;line-height:1.45}
+.brief-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;width:100%}
+.brief-card{background:var(--bg-card);border:1px solid var(--border);border-radius:14px;padding:1.2rem 1.4rem;box-shadow:var(--shadow);text-align:left;transition:transform 0.3s ease;border-top:4px solid}
+.brief-card:hover{transform:translateY(-3px)}
+.brief-card h4{font-size:0.95rem;font-weight:800;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:0.7rem;display:flex;align-items:center;gap:8px}
+.brief-card ul{list-style:none;font-size:0.98rem;color:var(--text-muted);line-height:1.55}
+.brief-card ul li{padding:4px 0;padding-left:1.2rem;position:relative}
+.brief-card ul li::before{content:'•';position:absolute;left:0;color:var(--gold);font-weight:bold;font-size:1.3rem;line-height:1}
+.brief-vision{background:linear-gradient(135deg,rgba(184,134,11,0.09),rgba(192,57,43,0.06));border:1.5px solid var(--gold-border);border-radius:14px;padding:1rem 1.8rem;text-align:center;box-shadow:var(--shadow)}
+.brief-vision strong{font-size:0.85rem;font-weight:800;letter-spacing:2.5px;text-transform:uppercase;color:var(--gold);display:block;margin-bottom:0.3rem}
+.brief-vision p{font-family:'Cormorant Garamond',serif;font-size:1.45rem;font-style:italic;color:var(--text);line-height:1.4;font-weight:600}
 
 /* ===== HTML MAPS ===== */
 .map-container{width:100%;max-width:1150px;margin-top:0.5rem}
@@ -256,6 +264,7 @@ body{font-family:'Inter',sans-serif;background:#f0f2f8;color:#1a1a2e;overflow:hi
   .persona-layout{grid-template-columns:1fr}
   .stats-grid,.constraints-grid{grid-template-columns:repeat(2,1fr)}
   .metrics-grid{grid-template-columns:repeat(2,1fr)}
+  .brief-grid{grid-template-columns:1fr}
   .context-map,.opportunity-map{grid-template-columns:1fr}
   .context-center,.context-flow,.opp-core,.opp-impact{grid-column:1/2}
 }
@@ -633,17 +642,56 @@ body{font-family:'Inter',sans-serif;background:#f0f2f8;color:#1a1a2e;overflow:hi
 </section>
 
 <!-- 13: DESIGN BRIEF -->
-<section class="slide" data-slide="12">
+<section class="slide" data-slide="12" style="justify-content:flex-start;padding-top:30px">
   <div class="animate-in label">DESIGN BRIEF</div>
-  <h2 class="animate-in heading-lg text-gradient" style="text-align:center">"Dastarkhwan"</h2>
-  <p class="animate-in text-muted" style="text-align:center;margin-bottom:1rem;font-size:1.2rem">The Wedding Food Rescue Platform</p>
+  <h2 class="animate-in heading-md" style="margin-bottom:0.4rem">Project <span class="text-gradient">Design Brief</span></h2>
+  
   <div class="animate-in brief-layout">
-    <div class="challenge-text">Design a real-time, trust-building platform that seamlessly connects Hyderabadi wedding hosts and caterers with verified food-rescue NGOs — enabling pre-planned and on-demand surplus food pickup that is <strong style="color:var(--gold)">safe, dignified, and rewarding</strong> for all parties.</div>
-  </div>
-  <div class="animate-in target-users" style="max-width:900px">
-    <div class="target-user-card"><div class="tu-icon">👨‍👩‍👧‍👦</div><h4 class="text-gold">Primary</h4><p>Wedding hosts organizing Deccani/Telugu/Marwari functions</p></div>
-    <div class="target-user-card"><div class="tu-icon">👨‍🍳</div><h4 class="text-rose">Secondary</h4><p>Caterers & event planners controlling food production</p></div>
-    <div class="target-user-card"><div class="tu-icon">🚐</div><h4 class="text-teal">Tertiary</h4><p>Food-rescue NGOs & volunteer networks</p></div>
+    <!-- Hero Banner: Challenge & Goal -->
+    <div class="brief-hero">
+      <span class="brief-hero-badge">Design Challenge</span>
+      <div class="brief-challenge">How might we reduce food waste at large weddings by connecting hosts with nearby food-rescue NGOs in real time?</div>
+      <div class="brief-goal"><strong style="color:var(--text)">Our Goal:</strong> To minimize edible food waste by enabling quick and seamless coordination between wedding hosts and food-rescue organizations.</div>
+    </div>
+
+    <!-- 3 Key Pillars -->
+    <div class="brief-grid">
+      <!-- Target Users -->
+      <div class="brief-card" style="border-top-color:var(--gold)">
+        <h4 style="color:var(--gold)">👥 Target Users</h4>
+        <ul>
+          <li><strong>Primary Users:</strong> Mainly wedding hosts and event organizers</li>
+          <li><strong>Secondary Users:</strong> Caterers, event staff, NGOs, and volunteers</li>
+          <li><strong>Final Beneficiaries:</strong> People and communities who need food</li>
+        </ul>
+      </div>
+
+      <!-- Main User Needs -->
+      <div class="brief-card" style="border-top-color:var(--teal)">
+        <h4 style="color:var(--teal)">🎯 Main User Needs</h4>
+        <ul>
+          <li>A fast and trustworthy way to donate surplus food</li>
+          <li>Real-time NGO connections & rapid coordination</li>
+          <li>Assurance that the food reaches people safely</li>
+        </ul>
+      </div>
+
+      <!-- Scope -->
+      <div class="brief-card" style="border-top-color:var(--purple)">
+        <h4 style="color:var(--purple)">🔍 Project Scope</h4>
+        <ul>
+          <li>Connecting hosts with verified nearby NGOs</li>
+          <li>Providing real-time communication & pickup coordination</li>
+          <li>Maintaining food safety standards & protocols</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Vision Banner -->
+    <div class="brief-vision">
+      <strong>🌟 Project Vision</strong>
+      <p>"A world where no good food goes to waste, and every celebration becomes a reason to feed someone in need."</p>
+    </div>
   </div>
 </section>
 
